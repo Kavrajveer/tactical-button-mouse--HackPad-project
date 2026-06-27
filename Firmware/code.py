@@ -4,6 +4,11 @@ import digitalio
 import rotaryio
 import usb_hid
 from adafruit_hid.mouse import Mouse
+import busio
+import displayio
+from adafruit_display_text import label
+import adafruit_displayio_ssd1306
+
 
 # Initialize the Mouse HID object
 mouse = Mouse(usb_hid.devices)
@@ -53,6 +58,14 @@ last_scroll_position = encoder_scroll.position
 # Encoder 2: Speed Control (using pins D10, D11)
 encoder_speed = rotaryio.IncrementalEncoder(board.D10, board.D11)
 last_speed_position = encoder_speed.position
+
+# Initialize OLED
+i2c = busio.I2C(board.SCL, board.SDA)
+display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
+display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
+text_area = label.Label(None, text="Speed: 10", x=5, y=15)
+display.show(text_area)
+
 # --- MAIN EXECUTION LOOP ---
 select_held = False # Tracks if the text-select toggle is active
 
@@ -69,7 +82,8 @@ while True:
                                                                             cursor_speed = max(1, cursor_speed) 
                                                                                     last_speed_position = current_speed_position
                                                                                             # (OLED dashboard update logic will go here next)
-
+                                                                                             # Update the screen
+                                                                                                     text_area.text = f"Speed: {cursor_speed}"
                                                                                                 # 2. Handle Vertical Scrolling
                                                                                                     current_scroll_position = encoder_scroll.position
                                                                                                         if current_scroll_position != last_scroll_position:
