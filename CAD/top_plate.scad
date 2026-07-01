@@ -45,4 +45,11 @@ difference() {
     translate([cx - spacing, cy + spacing, -1]) cube([switch_size, switch_size, thickness + 2]); // Double Click (Top Left)
     translate([cx + spacing, cy + spacing, -1]) cube([switch_size, switch_size, thickness + 2]); // Left Click (Top Right)
     translate([cx - spacing, cy - spacing, -1]) cube([switch_size, switch_size, thickness + 2]); // Select (Bottom Left)
+
+    // 4. --- MOUNTING HOLES ---
+    // 3.2mm holes to pass the M3 screws through to the chassis
+    translate([7, 7, -1]) cylinder(h=thickness+2, d=3.2);
+    translate([plate_width - 7, 7, -1]) cylinder(h=thickness+2, d=3.2);
+    translate([7, plate_height - 7, -1]) cylinder(h=thickness+2, d=3.2);
+    translate([plate_width - 7, plate_height - 7, -1]) cylinder(h=thickness+2, d=3.2);
 }
